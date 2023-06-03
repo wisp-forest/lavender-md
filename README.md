@@ -59,9 +59,10 @@ var processor = MarkdownProcessor.text().copyWith(OwoUICompiler::new).copyWith(n
 var components = processor.process("this displays a zombie: <entity;minecraft:zombie>");
 ```
 
-Finally, if you need maximal flexibility, you can also simply instantiate `MarkdownProcessor` directly.
+Finally, if you need maximal flexibility, you can also simply instantiate `MarkdownProcessor` directly. To explore what 
+other features there are for you to use, check out the `io.wispforest.lavendermd.feature` package
 
-## Writing extension
+## Writing extensions
  - **Adding a new feature**<br>
    Implement the `MarkdownFeature` interface and tokenize & parse to your heart's content. This can be somewhat tricky
    and requires at least a basic understanding of recursive-descent parsing. For basic, non-nested examples you can look
