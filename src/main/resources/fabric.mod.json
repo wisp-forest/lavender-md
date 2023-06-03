@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "lavender-md",
+  "version": "${version}",
+
+  "name": "lavender-md",
+  "description": "",
+  "authors": [
+    "glisco"
+  ],
+  "contact": {
+    "sources": "https://github.com/wisp-forest/lavender-md"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": "*"
+  }
+}

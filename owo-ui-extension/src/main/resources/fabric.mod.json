@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "lavender-md-owo-ui",
+  "version": "${version}",
+
+  "name": "lavender-md-owo-ui",
+  "description": "",
+  "authors": [
+    "glisco"
+  ],
+  "contact": {
+    "sources": "https://github.com/wisp-forest/lavender-md"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "mixins": [
+    "lavender-md-owo-ui.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": "*"
+  }
+}

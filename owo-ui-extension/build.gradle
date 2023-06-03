@@ -1,0 +1,36 @@
+loom {
+    runConfigs.client.ideConfigGenerated = true
+
+    mods {
+        "lavender-md-owo-ui" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets {
+    testmod {
+        runtimeClasspath += main.runtimeClasspath
+        compileClasspath += main.compileClasspath
+    }
+}
+
+loom {
+    runs {
+        testmodClient {
+            client()
+            ideConfigGenerated true
+            name "Testmod Client"
+            source sourceSets.testmod
+        }
+    }
+}
+
+dependencies {
+    implementation rootProject.sourceSets.main.output
+    modApi "io.wispforest:owo-lib:${project.owo_version}"
+
+    // --- testmod ---
+
+    testmodImplementation sourceSets.main.output
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "lavender-md-test",
+  "version": "${version}",
+
+  "name": "lavender-md-test",
+  "description": "",
+  "authors": [
+    "glisco"
+  ],
+
+  "entrypoints": {
+    "client": [
+      "io.wispforest.lavendermdtest.LavenderMdTest"
+    ]
+  },
+
+  "license": "MIT",
+  "environment": "*",
+
+  "depends": {
+    "fabricloader": "*",
+    "fabric-api": "*",
+    "minecraft": "*",
+    "lavender-md": "*"
+  }
+}
