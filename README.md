@@ -62,7 +62,7 @@ var components = processor.process("this displays a zombie: <entity;minecraft:zo
 Finally, if you need maximal flexibility, you can also simply instantiate `MarkdownProcessor` directly.
 
 ## Writing extension
- - **Adding a new feature**
+ - **Adding a new feature**<br>
    Implement the `MarkdownFeature` interface and tokenize & parse to your heart's content. This can be somewhat tricky
    and requires at least a basic understanding of recursive-descent parsing. For basic, non-nested examples you can look
    the [owo-ui extension](https://github.com/wisp-forest/lavender-md/tree/master/owo-ui-extension/src/main/java/io/wispforest/lavendermd/feature) 
