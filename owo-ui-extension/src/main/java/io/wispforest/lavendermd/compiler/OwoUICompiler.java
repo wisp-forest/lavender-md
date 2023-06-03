@@ -8,7 +8,6 @@ import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
-import io.wispforest.owo.ui.util.Drawer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -49,8 +48,8 @@ public class OwoUICompiler implements MarkdownCompiler<ParentComponent> {
         this.textBuilder.pushStyle(style -> style.withFormatting(Formatting.GRAY));
 
         var quotation = Containers.verticalFlow(Sizing.content(), Sizing.content());
-        quotation.padding(Insets.of(5, 5, 7, 5)).surface((matrices, component) -> {
-            Drawer.fill(matrices, component.x(), component.y() + 3, component.x() + 2, component.y() + component.height() - 3, 0xFF777777);
+        quotation.padding(Insets.of(5, 5, 7, 5)).surface((context, component) -> {
+            context.fill(component.x(), component.y() + 3, component.x() + 2, component.y() + component.height() - 3, 0xFF777777);
         });
 
         this.push(quotation);
