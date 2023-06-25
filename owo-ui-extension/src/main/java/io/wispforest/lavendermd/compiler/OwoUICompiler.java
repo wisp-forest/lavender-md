@@ -19,6 +19,11 @@ import java.util.Deque;
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
+/**
+ * A secondary default compiler implementation which generates rich, formatted
+ * and structured output containing images and other arbitrary UI elements
+ * by compiling to an owo-ui component tree
+ */
 public class OwoUICompiler implements MarkdownCompiler<ParentComponent> {
 
     protected final Deque<FlowLayout> components = new ArrayDeque<>();
@@ -97,6 +102,9 @@ public class OwoUICompiler implements MarkdownCompiler<ParentComponent> {
         this.pop();
     }
 
+    /**
+     * Append {@code component} to this compiler's result
+     */
     public void visitComponent(Component component) {
         this.append(component);
     }
