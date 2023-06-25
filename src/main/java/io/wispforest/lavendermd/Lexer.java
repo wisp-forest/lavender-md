@@ -46,6 +46,10 @@ public class Lexer implements MarkdownFeature.TokenRegistrar {
         this.lexFunctions.computeIfAbsent(trigger, character -> new ArrayList<>()).add(0, lexer);
     }
 
+    /**
+     * A lex-function is responsible for consuming a string of characters
+     * in {@code nibbler} and appending the corresponding token(s) to {@code tokens}
+     */
     @FunctionalInterface
     public interface LexFunction {
         boolean lex(StringNibbler nibbler, List<Token> tokens);

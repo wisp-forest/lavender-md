@@ -41,6 +41,13 @@ public class Parser implements MarkdownFeature.NodeRegistrar {
         this.parseFunctions.put(trigger, parser);
     }
 
+    /**
+     * A parse-function is responsible for consuming a sequence of tokens
+     * from {@code tokens} and parsing child nodes using {@code parser}
+     * to generate the node indicated by the matched {@code trigger} token
+     *
+     * @param <T> The type of token this parse-function consumes
+     */
     @FunctionalInterface
     public interface ParseFunction<T extends Token> {
         Node parse(Parser parser, T trigger, ListNibbler<Token> tokens);
@@ -121,10 +128,12 @@ public class Parser implements MarkdownFeature.NodeRegistrar {
         public static Node empty() {
             return new Node() {
                 @Override
-                protected void visitStart(MarkdownCompiler<?> compiler) {}
+                protected void visitStart(MarkdownCompiler<?> compiler) {
+                }
 
                 @Override
-                protected void visitEnd(MarkdownCompiler<?> compiler) {}
+                protected void visitEnd(MarkdownCompiler<?> compiler) {
+                }
             };
         }
     }
@@ -142,7 +151,8 @@ public class Parser implements MarkdownFeature.NodeRegistrar {
         }
 
         @Override
-        protected void visitEnd(MarkdownCompiler<?> compiler) {}
+        protected void visitEnd(MarkdownCompiler<?> compiler) {
+        }
     }
 
     public static class FormattingNode extends Node {

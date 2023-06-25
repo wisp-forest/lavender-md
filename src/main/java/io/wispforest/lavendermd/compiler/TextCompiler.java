@@ -10,6 +10,11 @@ import net.minecraft.util.Identifier;
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
+/**
+ * lavender-md's default compiler implementation which compiles to a
+ * single Minecraft {@link Text} component - depending on the input
+ * AST it might contain multiple lines
+ */
 public class TextCompiler implements MarkdownCompiler<Text> {
 
     private final TextBuilder builder = new TextBuilder();
