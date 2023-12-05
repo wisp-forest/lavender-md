@@ -16,6 +16,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.NoSuchElementException;
+
 public class EntityFeature implements MarkdownFeature {
 
     @Override
@@ -49,7 +51,7 @@ public class EntityFeature implements MarkdownFeature {
                 var entityType = Registries.ENTITY_TYPE.getOrEmpty(new Identifier(entityString)).orElseThrow();
                 tokens.add(new EntityToken(entityString, entityType, nbt));
                 return true;
-            } catch (CommandSyntaxException e) {
+            } catch (CommandSyntaxException | NoSuchElementException e) {
                 return false;
             }
         }, '<');
