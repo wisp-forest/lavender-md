@@ -6,7 +6,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "client": [
-    "TextureUtilMixin"
-  ]
+  "client": []
 }

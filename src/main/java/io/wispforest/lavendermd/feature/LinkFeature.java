@@ -10,6 +10,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URI;
+
 public class LinkFeature implements MarkdownFeature {
 
     @Override
@@ -46,9 +48,9 @@ public class LinkFeature implements MarkdownFeature {
             if (tokens.peek() instanceof CloseLinkToken right) {
                 tokens.nibble();
                 return new Parser.FormattingNode(style -> style.withClickEvent(
-                        new ClickEvent(ClickEvent.Action.OPEN_URL, right.link)
+                        new ClickEvent.OpenUrl(URI.create(right.link))
                 ).withHoverEvent(
-                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(right.link))
+                        new HoverEvent.ShowText(Text.literal(right.link))
                 ).withColor(Formatting.BLUE)).addChild(content);
             } else {
                 tokens.setPointer(pointer);

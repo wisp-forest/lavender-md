@@ -1,13 +1,13 @@
 package io.wispforest.lavendermd.compiler;
 
 import io.wispforest.lavendermd.util.TextBuilder;
-import io.wispforest.lavendermd.util.TextureSizeLookup;
 import io.wispforest.owo.ui.component.BoxComponent;
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -75,11 +75,17 @@ public class OwoUICompiler implements MarkdownCompiler<ParentComponent> {
     public void visitImage(Identifier image, String description, boolean fit) {
         if (fit) {
             this.append(Containers.stack(Sizing.fill(100), Sizing.content())
-                    .child(Components.texture(image, 0, 0, 256, 256, 256, 256).blend(true).tooltip(Text.literal(description)).sizing(Sizing.fixed(100)))
-                    .horizontalAlignment(HorizontalAlignment.CENTER));
+                .child(Components.texture(image, 0, 0, 256, 256, 256, 256).blend(true).tooltip(Text.literal(description)).sizing(Sizing.fixed(100)))
+                .horizontalAlignment(HorizontalAlignment.CENTER));
         } else {
-            var textureSize = TextureSizeLookup.sizeOf(image);
-            if (textureSize == null) textureSize = new TextureSizeLookup.Size(64, 64);
+            var texture = MinecraftClient.getInstance().getTextureManager().getTexture(image);
+            Size textureSize;
+
+            if (texture != null) {
+                textureSize = Size.of(texture.getGlTexture().getWidth(0), texture.getGlTexture().getHeight(64));
+            } else {
+                textureSize = Size.of(64, 64);
+            }
 
             this.append(Components.texture(image, 0, 0, textureSize.width(), textureSize.height(), textureSize.width(), textureSize.height()).blend(true).tooltip(Text.literal(description)));
         }

@@ -69,7 +69,7 @@ public class KeybindFeature implements MarkdownFeature {
         @Override
         public void visitStart(MarkdownCompiler<?> compiler) {
             compiler.visitStyle(style -> style.withColor(Formatting.GOLD).withHoverEvent(
-                    new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(
+                    new HoverEvent.ShowText(Text.translatable(
                             "text.lavender.keybind_tooltip",
                             Text.translatable(this.binding.getCategory()),
                             Text.translatable(this.binding.getTranslationKey())

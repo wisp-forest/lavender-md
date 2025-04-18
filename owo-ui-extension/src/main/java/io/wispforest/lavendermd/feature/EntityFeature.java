@@ -44,7 +44,7 @@ public class EntityFeature implements MarkdownFeature {
                 int nbtIndex = entityString.indexOf('{');
                 if (nbtIndex != -1) {
 
-                    nbt = new StringNbtReader(new StringReader(entityString.substring(nbtIndex))).parseCompound();
+                    nbt = StringNbtReader.readCompoundAsArgument(new StringReader(entityString.substring(nbtIndex)));
                     entityString = entityString.substring(0, nbtIndex);
                 }
 
