@@ -32,7 +32,7 @@ public class KeybindFeature implements MarkdownFeature {
             var keybindKey = nibbler.consumeUntil('>');
             if (keybindKey == null) return false;
 
-            var binding = Arrays.stream(MinecraftClient.getInstance().options.allKeys).filter($ -> $.getTranslationKey().equals(keybindKey)).findAny();
+            var binding = Arrays.stream(MinecraftClient.getInstance().options.allKeys).filter($ -> $.getBoundKeyTranslationKey().equals(keybindKey)).findAny();
             if (binding.isEmpty()) return false;
 
             tokens.add(new KeybindToken(keybindKey, binding.get()));
@@ -71,8 +71,8 @@ public class KeybindFeature implements MarkdownFeature {
             compiler.visitStyle(style -> style.withColor(Formatting.GOLD).withHoverEvent(
                     new HoverEvent.ShowText(Text.translatable(
                             "text.lavender.keybind_tooltip",
-                            Text.translatable(this.binding.getCategory()),
-                            Text.translatable(this.binding.getTranslationKey())
+                            this.binding.getCategory().getLabel(),
+                            Text.translatable(this.binding.getBoundKeyTranslationKey())
                     ))
             ));
             compiler.visitText(this.binding.getBoundKeyLocalizedText().getString());
