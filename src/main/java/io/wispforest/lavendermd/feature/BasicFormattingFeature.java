@@ -4,7 +4,7 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.text.Style;
+import net.minecraft.network.chat.Style;
 
 import java.util.function.UnaryOperator;
 
@@ -69,7 +69,7 @@ public class BasicFormattingFeature implements MarkdownFeature {
     @Override
     public void registerNodes(NodeRegistrar registrar) {
         this.registerDoubleTokenFormatting(registrar, TildeToken.class, style -> style.withStrikethrough(true));
-        this.registerDoubleTokenFormatting(registrar, UnderscoreToken.class, style -> style.withUnderline(true));
+        this.registerDoubleTokenFormatting(registrar, UnderscoreToken.class, style -> style.withUnderlined(true));
 
         registrar.registerNode((parser, left, tokens) -> {
             int pointer = tokens.pointer();

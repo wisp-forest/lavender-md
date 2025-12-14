@@ -1,6 +1,6 @@
 package io.wispforest.lavendermd.util;
 
-import net.minecraft.util.function.CharPredicate;
+import net.minecraft.CharPredicate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;

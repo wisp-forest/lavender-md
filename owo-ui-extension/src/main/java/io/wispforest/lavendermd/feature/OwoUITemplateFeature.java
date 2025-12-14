@@ -7,17 +7,18 @@ import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.OwoUICompiler;
 import io.wispforest.lavendermd.util.StringNibbler;
-import io.wispforest.owo.ui.component.Components;
-import io.wispforest.owo.ui.container.Containers;
-import io.wispforest.owo.ui.core.Component;
+import io.wispforest.owo.ui.component.UIComponents;
+import io.wispforest.owo.ui.container.UIContainers;
 import io.wispforest.owo.ui.core.Insets;
 import io.wispforest.owo.ui.core.Sizing;
 import io.wispforest.owo.ui.core.Surface;
+import io.wispforest.owo.ui.core.UIComponent;
 import io.wispforest.owo.ui.parsing.IncompatibleUIModelException;
 import io.wispforest.owo.ui.parsing.UIModelLoader;
 import io.wispforest.owo.ui.parsing.UIModelParsingException;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.Containers;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class OwoUITemplateFeature implements MarkdownFeature {
     public OwoUITemplateFeature() {
         this(new TemplateProvider() {
             @Override
-            public <C extends Component> C template(Identifier model, Class<C> expectedClass, String templateName, Map<String, String> templateParams) {
+            public <C extends UIComponent> C template(Identifier model, Class<C> expectedClass, String templateName, Map<String, String> templateParams) {
                 var uiModel = UIModelLoader.get(model);
                 if (uiModel == null) {
                     throw new UIModelParsingException("No UI model with id '" + model + " is currently loaded");
@@ -137,12 +138,12 @@ public class OwoUITemplateFeature implements MarkdownFeature {
                     builtParams.put(paramName, paramValue);
                 }
 
-                ((OwoUICompiler) compiler).visitComponent(OwoUITemplateFeature.this.templateSource.template(modelId, Component.class, this.templateName, builtParams));
+                ((OwoUICompiler) compiler).visitComponent(OwoUITemplateFeature.this.templateSource.template(modelId, UIComponent.class, this.templateName, builtParams));
             } catch (UIModelParsingException | IncompatibleUIModelException e) {
                 LOGGER.warn("Failed to build owo-ui template markdown element", e);
                 ((OwoUICompiler) compiler).visitComponent(
-                        Containers.verticalFlow(Sizing.fill(100), Sizing.content())
-                                .child(Components.label(Text.literal(e.getMessage())).horizontalSizing(Sizing.fill(100)))
+                        UIContainers.verticalFlow(Sizing.fill(100), Sizing.content())
+                                .child(UIComponents.label(Component.literal(e.getMessage())).horizontalSizing(Sizing.fill(100)))
                                 .padding(Insets.of(10))
                                 .surface(Surface.flat(0x77A00000).and(Surface.outline(0x77FF0000)))
                 );
@@ -155,6 +156,6 @@ public class OwoUITemplateFeature implements MarkdownFeature {
 
     @FunctionalInterface
     public interface TemplateProvider {
-        <C extends Component> C template(Identifier model, Class<C> expectedClass, String templateName, Map<String, String> templateParams);
+        <C extends UIComponent> C template(Identifier model, Class<C> expectedClass, String templateName, Map<String, String> templateParams);
     }
 }

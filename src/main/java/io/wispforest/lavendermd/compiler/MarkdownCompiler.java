@@ -1,7 +1,7 @@
 package io.wispforest.lavendermd.compiler;
 
-import net.minecraft.text.Style;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
 
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;

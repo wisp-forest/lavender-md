@@ -4,7 +4,7 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ImageFeature implements MarkdownFeature {
 
@@ -78,7 +78,7 @@ public class ImageFeature implements MarkdownFeature {
 
         @Override
         protected void visitStart(MarkdownCompiler<?> compiler) {
-            compiler.visitImage(Identifier.of(this.identifier), this.description, this.fit);
+            compiler.visitImage(Identifier.parse(this.identifier), this.description, this.fit);
         }
 
         @Override

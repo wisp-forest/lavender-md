@@ -4,8 +4,8 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.Optional;
 
@@ -38,8 +38,8 @@ public class TranslationsFeature implements MarkdownFeature {
     public void registerNodes(NodeRegistrar registrar) {
         registrar.registerNode((parser, translation, tokens) -> {
             var result = Parser.Node.empty();
-            Text.translatable(translation.key).visit((style, content) -> {
-                result.addChild(new Parser.FormattingNode(style::withParent).addChild(new Parser.TextNode(content)));
+            Component.translatable(translation.key).visit((style, content) -> {
+                result.addChild(new Parser.FormattingNode(style::applyTo).addChild(new Parser.TextNode(content)));
                 return Optional.empty();
             }, Style.EMPTY);
 

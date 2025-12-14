@@ -5,7 +5,7 @@ import io.wispforest.lavendermd.Lexer.TextToken;
 import io.wispforest.lavendermd.Lexer.Token;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.util.ListNibbler;
-import net.minecraft.text.Style;
+import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

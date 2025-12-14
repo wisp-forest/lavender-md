@@ -4,11 +4,11 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 
 import java.util.Arrays;
 
@@ -32,7 +32,7 @@ public class KeybindFeature implements MarkdownFeature {
             var keybindKey = nibbler.consumeUntil('>');
             if (keybindKey == null) return false;
 
-            var binding = Arrays.stream(MinecraftClient.getInstance().options.allKeys).filter($ -> $.getTranslationKey().equals(keybindKey)).findAny();
+            var binding = Arrays.stream(Minecraft.getInstance().options.keyMappings).filter($ -> $.saveString().equals(keybindKey)).findAny();
             if (binding.isEmpty()) return false;
 
             tokens.add(new KeybindToken(keybindKey, binding.get()));
@@ -43,16 +43,16 @@ public class KeybindFeature implements MarkdownFeature {
     @Override
     public void registerNodes(NodeRegistrar registrar) {
         registrar.registerNode(
-                (parser, keybindToken, tokens) -> new KeybindNode(keybindToken.binding),
-                (token, tokens) -> token instanceof KeybindToken keybind ? keybind : null
+            (parser, keybindToken, tokens) -> new KeybindNode(keybindToken.binding),
+            (token, tokens) -> token instanceof KeybindToken keybind ? keybind : null
         );
     }
 
     private static class KeybindToken extends Lexer.Token {
 
-        public final KeyBinding binding;
+        public final KeyMapping binding;
 
-        public KeybindToken(String content, KeyBinding binding) {
+        public KeybindToken(String content, KeyMapping binding) {
             super(content);
             this.binding = binding;
         }
@@ -60,22 +60,22 @@ public class KeybindFeature implements MarkdownFeature {
 
     private static class KeybindNode extends Parser.Node {
 
-        private final KeyBinding binding;
+        private final KeyMapping binding;
 
-        public KeybindNode(KeyBinding binding) {
+        public KeybindNode(KeyMapping binding) {
             this.binding = binding;
         }
 
         @Override
         public void visitStart(MarkdownCompiler<?> compiler) {
-            compiler.visitStyle(style -> style.withColor(Formatting.GOLD).withHoverEvent(
-                    new HoverEvent.ShowText(Text.translatable(
-                            "text.lavender.keybind_tooltip",
-                            Text.translatable(this.binding.getCategory()),
-                            Text.translatable(this.binding.getTranslationKey())
-                    ))
+            compiler.visitStyle(style -> style.withColor(ChatFormatting.GOLD).withHoverEvent(
+                new HoverEvent.ShowText(Component.translatable(
+                    "text.lavender.keybind_tooltip",
+                    this.binding.getCategory().label(),
+                    Component.translatable(this.binding.saveString())
+                ))
             ));
-            compiler.visitText(this.binding.getBoundKeyLocalizedText().getString());
+            compiler.visitText(this.binding.getTranslatedKeyMessage().getString());
         }
 
         @Override

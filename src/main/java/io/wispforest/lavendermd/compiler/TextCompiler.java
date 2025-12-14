@@ -1,21 +1,21 @@
 package io.wispforest.lavendermd.compiler;
 
 import io.wispforest.lavendermd.util.TextBuilder;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
 
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
 /**
  * lavender-md's default compiler implementation which compiles to a
- * single Minecraft {@link Text} component - depending on the input
+ * single Minecraft {@link Component} - depending on the input
  * AST it might contain multiple lines
  */
-public class TextCompiler implements MarkdownCompiler<Text> {
+public class TextCompiler implements MarkdownCompiler<Component> {
 
     private final TextBuilder builder = new TextBuilder();
     private final int assumedOutputWidth;
@@ -38,20 +38,20 @@ public class TextCompiler implements MarkdownCompiler<Text> {
                 this.builder.append(this.quoteMarker());
             } else {
                 for (var line : text.split("\n")) {
-                    this.builder.append(this.quoteMarker().append(Text.literal(line)));
+                    this.builder.append(this.quoteMarker().append(Component.literal(line)));
                 }
             }
         } else if (this.listDepth != 0 && text.contains("\n")) {
             if (text.equals("\n")) {
-                this.builder.append(Text.literal("\n   " + "  ".repeat(this.listDepth - 1)));
+                this.builder.append(Component.literal("\n   " + "  ".repeat(this.listDepth - 1)));
             } else {
                 var lines = text.split("\n");
                 for (int i = 0; i < lines.length; i++) {
-                    this.builder.append(Text.literal((i > 0 ? "\n   " : "   ") + "  ".repeat(this.listDepth - 1)).append(Text.literal(lines[i])));
+                    this.builder.append(Component.literal((i > 0 ? "\n   " : "   ") + "  ".repeat(this.listDepth - 1)).append(Component.literal(lines[i])));
                 }
             }
         } else {
-            this.builder.append(Text.literal(text));
+            this.builder.append(Component.literal(text));
         }
     }
 
@@ -69,7 +69,7 @@ public class TextCompiler implements MarkdownCompiler<Text> {
     public void visitBlockQuote() {
         this.quoteDepth++;
         this.builder.append(this.quoteMarker());
-        this.builder.pushStyle(style -> style.withColor(Formatting.GRAY).withItalic(true));
+        this.builder.pushStyle(style -> style.withColor(ChatFormatting.GRAY).withItalic(true));
     }
 
     @Override
@@ -80,22 +80,22 @@ public class TextCompiler implements MarkdownCompiler<Text> {
         if (this.quoteDepth > 0) {
             this.builder.append(this.quoteMarker());
         } else {
-            this.builder.append(Text.literal("\n"));
+            this.builder.append(Component.literal("\n"));
         }
     }
 
-    private MutableText quoteMarker() {
-        return Text.literal("\n >" + ">".repeat(this.quoteDepth) + " ").formatted(Formatting.DARK_GRAY);
+    private MutableComponent quoteMarker() {
+        return Component.literal("\n >" + ">".repeat(this.quoteDepth) + " ").withStyle(ChatFormatting.DARK_GRAY);
     }
 
     @Override
     public void visitHorizontalRule() {
-        this.builder.append(Text.literal("-".repeat(this.assumedOutputWidth)).formatted(Formatting.DARK_GRAY));
+        this.builder.append(Component.literal("-".repeat(this.assumedOutputWidth)).withStyle(ChatFormatting.DARK_GRAY));
     }
 
     @Override
     public void visitImage(Identifier image, String description, boolean fit) {
-        this.builder.append(Text.literal("[" + description + "]").formatted(Formatting.YELLOW));
+        this.builder.append(Component.literal("[" + description + "]").withStyle(ChatFormatting.YELLOW));
     }
 
     @Override
@@ -103,9 +103,9 @@ public class TextCompiler implements MarkdownCompiler<Text> {
         var listPrefix = ordinal.isPresent() ? " " + ordinal.getAsInt() + ". " : " • ";
 
         if (this.listDepth > 0) {
-            this.builder.append(Text.literal("\n" + "   ".repeat(this.listDepth) + listPrefix));
+            this.builder.append(Component.literal("\n" + "   ".repeat(this.listDepth) + listPrefix));
         } else {
-            this.builder.append(Text.literal(listPrefix));
+            this.builder.append(Component.literal(listPrefix));
         }
 
         this.listDepth++;
@@ -116,14 +116,14 @@ public class TextCompiler implements MarkdownCompiler<Text> {
         this.listDepth--;
 
         if (this.listDepth > 0) {
-            this.builder.append(Text.literal("   ".repeat(this.listDepth)));
+            this.builder.append(Component.literal("   ".repeat(this.listDepth)));
         } else {
-            this.builder.append(Text.literal("\n"));
+            this.builder.append(Component.literal("\n"));
         }
     }
 
     @Override
-    public Text compile() {
+    public Component compile() {
         return this.builder.build();
     }
 

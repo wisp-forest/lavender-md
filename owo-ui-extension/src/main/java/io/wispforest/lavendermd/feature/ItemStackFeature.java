@@ -7,15 +7,15 @@ import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.OwoUICompiler;
-import io.wispforest.owo.ui.component.Components;
-import net.minecraft.command.argument.ItemStringReader;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryWrapper;
+import io.wispforest.owo.ui.component.UIComponents;
+import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemStackFeature implements MarkdownFeature {
 
-    private final RegistryWrapper.WrapperLookup registries;
-    public ItemStackFeature(RegistryWrapper.WrapperLookup registries) {
+    private final HolderLookup.Provider registries;
+    public ItemStackFeature(HolderLookup.Provider registries) {
         this.registries = registries;
     }
 
@@ -38,10 +38,10 @@ public class ItemStackFeature implements MarkdownFeature {
             if (itemStackString == null) return false;
 
             try {
-                var result = new ItemStringReader(this.registries).consume(new StringReader(itemStackString));
+                var result = new ItemParser(this.registries).parse(new StringReader(itemStackString));
 
-                var stack = result.item().value().getDefaultStack();
-                stack.applyUnvalidatedChanges(result.components());
+                var stack = result.item().value().getDefaultInstance();
+                stack.applyComponents(result.components());
 
                 tokens.add(new ItemStackToken(itemStackString, stack));
                 return true;
@@ -79,7 +79,7 @@ public class ItemStackFeature implements MarkdownFeature {
 
         @Override
         protected void visitStart(MarkdownCompiler<?> compiler) {
-            ((OwoUICompiler) compiler).visitComponent(Components.item(this.stack).setTooltipFromStack(true));
+            ((OwoUICompiler) compiler).visitComponent(UIComponents.item(this.stack).setTooltipFromStack(true));
         }
 
         @Override

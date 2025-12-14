@@ -8,8 +8,8 @@ import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.component.TextAreaComponent;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.util.CommandOpenedScreen;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,7 +17,7 @@ import java.io.StringWriter;
 public class EditMdScreen extends BaseUIModelScreen<FlowLayout> implements CommandOpenedScreen {
 
     public EditMdScreen() {
-        super(FlowLayout.class, Identifier.of("lavender-md-test", "edit-md"));
+        super(FlowLayout.class, Identifier.fromNamespaceAndPath("lavender-md-test", "edit-md"));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class EditMdScreen extends BaseUIModelScreen<FlowLayout> implements Comma
             try {
                 anchor.<FlowLayout>configure(layout -> {
                     var processor = MarkdownProcessor.richText(0).copyWith(OwoUICompiler::new)
-                            .copyWith(new ImageFeature(), new BlockStateFeature(), new ItemStackFeature(this.client.world.getRegistryManager()), new EntityFeature(), new OwoUITemplateFeature(), new KeybindFeature(), new TranslationsFeature());
+                            .copyWith(new ImageFeature(), new BlockStateFeature(), new ItemStackFeature(this.minecraft.level.registryAccess()), new EntityFeature(), new OwoUITemplateFeature(), new KeybindFeature(), new TranslationsFeature());
 
                     layout.clearChildren();
                     layout.child(processor.process(value));
@@ -41,7 +41,7 @@ public class EditMdScreen extends BaseUIModelScreen<FlowLayout> implements Comma
                 var traceWriter = new PrintWriter(trace);
                 e.printStackTrace(traceWriter);
 
-                output.text(Text.literal(trace.toString()));
+                output.text(Component.literal(trace.toString()));
             }
         });
     }

@@ -7,13 +7,14 @@ import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.OwoUICompiler;
-import io.wispforest.owo.ui.component.Components;
+import io.wispforest.owo.ui.component.UIComponents;
 import io.wispforest.owo.ui.core.Sizing;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.NoSuchElementException;
@@ -39,16 +40,16 @@ public class EntityFeature implements MarkdownFeature {
             if (entityString == null) return false;
 
             try {
-                NbtCompound nbt = null;
+                CompoundTag nbt = null;
 
                 int nbtIndex = entityString.indexOf('{');
                 if (nbtIndex != -1) {
 
-                    nbt = StringNbtReader.readCompoundAsArgument(new StringReader(entityString.substring(nbtIndex)));
+                    nbt = TagParser.parseCompoundAsArgument(new StringReader(entityString.substring(nbtIndex)));
                     entityString = entityString.substring(0, nbtIndex);
                 }
 
-                var entityType = Registries.ENTITY_TYPE.getOptionalValue(Identifier.of(entityString)).orElseThrow();
+                var entityType = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(entityString)).orElseThrow();
                 tokens.add(new EntityToken(entityString, entityType, nbt));
                 return true;
             } catch (CommandSyntaxException | NoSuchElementException e) {
@@ -68,9 +69,9 @@ public class EntityFeature implements MarkdownFeature {
     private static class EntityToken extends Lexer.Token {
 
         public final EntityType<?> type;
-        public final @Nullable NbtCompound nbt;
+        public final @Nullable CompoundTag nbt;
 
-        public EntityToken(String content, EntityType<?> type, @Nullable NbtCompound nbt) {
+        public EntityToken(String content, EntityType<?> type, @Nullable CompoundTag nbt) {
             super(content);
             this.type = type;
             this.nbt = nbt;
@@ -80,16 +81,16 @@ public class EntityFeature implements MarkdownFeature {
     private static class EntityNode extends Parser.Node {
 
         public final EntityType<?> type;
-        public final @Nullable NbtCompound nbt;
+        public final @Nullable CompoundTag nbt;
 
-        public EntityNode(EntityType<?> type, @Nullable NbtCompound nbt) {
+        public EntityNode(EntityType<?> type, @Nullable CompoundTag nbt) {
             this.type = type;
             this.nbt = nbt;
         }
 
         @Override
         protected void visitStart(MarkdownCompiler<?> compiler) {
-            ((OwoUICompiler) compiler).visitComponent(Components.entity(Sizing.fixed(32), this.type, this.nbt).scaleToFit(true));
+            ((OwoUICompiler) compiler).visitComponent(UIComponents.entity(Sizing.fixed(32), this.type, this.nbt).scaleToFit(true));
         }
 
         @Override

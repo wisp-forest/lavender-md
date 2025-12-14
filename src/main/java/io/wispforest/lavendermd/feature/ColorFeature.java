@@ -5,8 +5,8 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 
 public class ColorFeature implements MarkdownFeature {
 
-    private static final Map<String, Formatting> FORMATTING_COLORS = Stream.of(Formatting.values())
-            .filter(Formatting::isColor)
+    private static final Map<String, ChatFormatting> FORMATTING_COLORS = Stream.of(ChatFormatting.values())
+            .filter(ChatFormatting::isColor)
             .collect(ImmutableMap.toImmutableMap(formatting -> formatting.getName().toLowerCase(Locale.ROOT), Function.identity()));
 
     @Override
@@ -54,7 +54,7 @@ public class ColorFeature implements MarkdownFeature {
                     if (color == null) return false;
 
                     if (!FORMATTING_COLORS.containsKey(color)) return false;
-                    tokens.add(new OpenColorToken("{" + color + "}", style -> style.withFormatting(FORMATTING_COLORS.get(color))));
+                    tokens.add(new OpenColorToken("{" + color + "}", style -> style.withColor(FORMATTING_COLORS.get(color))));
                 }
             }
 

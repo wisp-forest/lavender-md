@@ -1,22 +1,22 @@
 package io.wispforest.lavendermd.util;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.UnaryOperator;
 
 /**
- * A utility for building a Minecraft {@link Text} component
+ * A utility for building a Minecraft {@link net.minecraft.network.chat.Component}
  * from a hierarchical style structure and text
  */
 public class TextBuilder {
 
     private final Deque<Style> styles;
 
-    private MutableText text = Text.empty();
+    private MutableComponent text = Component.empty();
     private boolean empty = true;
 
     public TextBuilder() {
@@ -27,8 +27,8 @@ public class TextBuilder {
     /**
      * Append {@code text} to this builder's result
      */
-    public void append(MutableText text) {
-        this.text.append(text.styled(style -> style.withParent(this.styles.peek())));
+    public void append(MutableComponent text) {
+        this.text.append(text.withStyle(style -> style.applyTo(this.styles.peek())));
         this.empty = false;
     }
 
@@ -50,13 +50,13 @@ public class TextBuilder {
      * Return this builder's current result and clear
      * all internal state, ready to build a fresh text
      */
-    public MutableText build() {
+    public MutableComponent build() {
         var result = this.text;
         if (result.getString().equals("\n")) {
-            result = Text.literal(" ");
+            result = Component.literal(" ");
         }
 
-        this.text = Text.empty();
+        this.text = Component.empty();
         this.empty = true;
 
         return result;

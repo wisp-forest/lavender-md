@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.TextCompiler;
 import io.wispforest.lavendermd.feature.*;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,7 +110,7 @@ public class MarkdownProcessor<R> {
      *     <li>Colors using <pre>{&lt;color name&gt;|#RRGGBB}content here{}</pre> syntax</li>
      * </ul>
      */
-    public static MarkdownProcessor<Text> text() {
+    public static MarkdownProcessor<Component> text() {
         return new MarkdownProcessor<>(TextCompiler::new, new BasicFormattingFeature(false), new ColorFeature());
     }
 
@@ -126,7 +126,7 @@ public class MarkdownProcessor<R> {
      *     <li>Block quotes</li>
      * </ul>
      */
-    public static MarkdownProcessor<Text> richText(int assumedOutputWidth) {
+    public static MarkdownProcessor<Component> richText(int assumedOutputWidth) {
         return new MarkdownProcessor<>(() -> new TextCompiler(assumedOutputWidth), new BasicFormattingFeature(), new ColorFeature(), new LinkFeature(), new ListFeature(), new BlockQuoteFeature());
     }
 }

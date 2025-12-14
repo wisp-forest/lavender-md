@@ -4,10 +4,10 @@ import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
@@ -50,8 +50,8 @@ public class LinkFeature implements MarkdownFeature {
                 return new Parser.FormattingNode(style -> style.withClickEvent(
                         new ClickEvent.OpenUrl(URI.create(right.link))
                 ).withHoverEvent(
-                        new HoverEvent.ShowText(Text.literal(right.link))
-                ).withColor(Formatting.BLUE)).addChild(content);
+                        new HoverEvent.ShowText(Component.literal(right.link))
+                ).withColor(ChatFormatting.BLUE)).addChild(content);
             } else {
                 tokens.setPointer(pointer);
                 return new Parser.TextNode(left.content());
