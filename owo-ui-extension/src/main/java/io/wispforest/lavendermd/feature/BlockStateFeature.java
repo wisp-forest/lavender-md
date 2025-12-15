@@ -4,8 +4,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
+import io.wispforest.lavendermd.compiler.BraidCompiler;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.OwoUICompiler;
+import io.wispforest.owo.braid.core.Alignment;
+import io.wispforest.owo.braid.core.Size;
+import io.wispforest.owo.braid.widgets.basic.Align;
+import io.wispforest.owo.braid.widgets.basic.Sized;
+import io.wispforest.owo.braid.widgets.object.BlockWidget;
 import io.wispforest.owo.ui.component.UIComponents;
 import io.wispforest.owo.ui.container.UIContainers;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
@@ -22,7 +28,7 @@ public class BlockStateFeature implements MarkdownFeature {
 
     @Override
     public boolean supportsCompiler(MarkdownCompiler<?> compiler) {
-        return compiler instanceof OwoUICompiler;
+        return compiler instanceof OwoUICompiler || compiler instanceof BraidCompiler;
     }
 
     @Override
@@ -73,11 +79,19 @@ public class BlockStateFeature implements MarkdownFeature {
 
         @Override
         protected void visitStart(MarkdownCompiler<?> compiler) {
-            ((OwoUICompiler) compiler).visitComponent(
-                    UIContainers.stack(Sizing.fill(100), Sizing.content())
-                            .child(UIComponents.block(this.state.blockState(), this.state.nbt()).sizing(Sizing.fixed(48)))
-                            .horizontalAlignment(HorizontalAlignment.CENTER)
-            );
+            if (compiler instanceof OwoUICompiler owoCompiler) {
+                owoCompiler.visitComponent(UIContainers.stack(Sizing.fill(100), Sizing.content())
+                    .child(UIComponents.block(this.state.blockState(), this.state.nbt()).sizing(Sizing.fixed(48)))
+                    .horizontalAlignment(HorizontalAlignment.CENTER));
+            } else if (compiler instanceof BraidCompiler braidCompiler) {
+                braidCompiler.visitWidget(new Align(
+                    Alignment.CENTER, null, 1.0,
+                    new Sized(
+                        Size.square(48),
+                        new BlockWidget(this.state.blockState(), this.state.nbt())
+                    )
+                ));
+            }
         }
 
         @Override

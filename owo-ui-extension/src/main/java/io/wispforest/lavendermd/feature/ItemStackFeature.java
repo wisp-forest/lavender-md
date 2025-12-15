@@ -5,11 +5,17 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.wispforest.lavendermd.Lexer;
 import io.wispforest.lavendermd.MarkdownFeature;
 import io.wispforest.lavendermd.Parser;
+import io.wispforest.lavendermd.compiler.BraidCompiler;
 import io.wispforest.lavendermd.compiler.MarkdownCompiler;
 import io.wispforest.lavendermd.compiler.OwoUICompiler;
+import io.wispforest.owo.braid.widgets.basic.Tooltip;
+import io.wispforest.owo.braid.widgets.object.ItemStackWidget;
+import io.wispforest.owo.ui.component.ItemComponent;
 import io.wispforest.owo.ui.component.UIComponents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemStackFeature implements MarkdownFeature {
@@ -26,7 +32,7 @@ public class ItemStackFeature implements MarkdownFeature {
 
     @Override
     public boolean supportsCompiler(MarkdownCompiler<?> compiler) {
-        return compiler instanceof OwoUICompiler;
+        return compiler instanceof OwoUICompiler || compiler instanceof BraidCompiler;
     }
 
     @Override
@@ -79,7 +85,15 @@ public class ItemStackFeature implements MarkdownFeature {
 
         @Override
         protected void visitStart(MarkdownCompiler<?> compiler) {
-            ((OwoUICompiler) compiler).visitComponent(UIComponents.item(this.stack).setTooltipFromStack(true));
+            if (compiler instanceof OwoUICompiler owoCompiler) {
+                owoCompiler.visitComponent(UIComponents.item(this.stack).setTooltipFromStack(true));
+            } else if (compiler instanceof BraidCompiler braidCompiler) {
+                var client = Minecraft.getInstance();
+                braidCompiler.visitWidget(new Tooltip(
+                    ItemComponent.tooltipFromItem(this.stack, Item.TooltipContext.of(client.level), client.player, null),
+                    new ItemStackWidget(this.stack)
+                ));
+            }
         }
 
         @Override

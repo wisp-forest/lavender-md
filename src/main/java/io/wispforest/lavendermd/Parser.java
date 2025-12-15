@@ -164,8 +164,7 @@ public class Parser implements MarkdownFeature.NodeRegistrar {
         }
 
         @Override
-        protected void visitEnd(MarkdownCompiler<?> compiler) {
-        }
+        protected void visitEnd(MarkdownCompiler<?> compiler) {}
     }
 
     public static class FormattingNode extends Node {

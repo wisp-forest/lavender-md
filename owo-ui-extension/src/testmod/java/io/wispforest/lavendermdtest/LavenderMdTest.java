@@ -2,6 +2,7 @@ package io.wispforest.lavendermdtest;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import io.wispforest.lavendermd.MarkdownProcessor;
+import io.wispforest.owo.braid.core.BraidScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,13 @@ public class LavenderMdTest implements ClientModInitializer {
 
             dispatcher.register(literal("edit-md").executes(context -> {
                 Minecraft.getInstance().setScreen(new EditMdScreen());
+                return 0;
+            }));
+
+            dispatcher.register(literal("edit-md-braid").executes(context -> {
+                Minecraft.getInstance().schedule(() -> {
+                    Minecraft.getInstance().setScreen(new BraidScreen(new BraidEditMdWidget()));
+                });
                 return 0;
             }));
         });
