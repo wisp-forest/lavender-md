@@ -26,9 +26,13 @@ loom {
     }
 }
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     implementation rootProject.sourceSets.main.output
-    modApi "io.wispforest:owo-lib:${project.owo_version}"
+    api "io.wispforest:owo-lib:${project.owo_version}"
 
     // --- testmod ---
 

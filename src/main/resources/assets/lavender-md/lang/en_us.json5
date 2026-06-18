@@ -1,0 +1,8 @@
+{
+  "text.lavender.keybind_tooltip": [
+    {text: "Key Bind:\n "},
+    {index: 0, color: "gray"},
+    {text: " > ", color: "dark_gray"},
+    {index: 1, color: "gray"}
+  ]
+}

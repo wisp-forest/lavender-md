@@ -1,11 +1,11 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
 allprojects {
     apply plugin: "java"
-    apply plugin: "fabric-loom"
+    apply plugin: "net.fabricmc.fabric-loom"
     apply plugin: "maven-publish"
 
     version = "${project.mod_version}+${project.minecraft_base_version}"
@@ -19,11 +19,10 @@ allprojects {
     dependencies {
         // To change the versions see the gradle.properties file
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
-        mappings loom.officialMojangMappings()
-        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+        implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
         // Fabric API. This is technically optional, but you probably want it anyway.
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+        implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     }
 
     base {
@@ -40,7 +39,7 @@ allprojects {
 
     tasks.withType(JavaCompile).configureEach {
         // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-        it.options.release = 21
+        it.options.release = 25
     }
 
     java {
@@ -49,8 +48,8 @@ allprojects {
         // If you remove this line, sources will not be generated.
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
     jar {

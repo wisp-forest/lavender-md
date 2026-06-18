@@ -13,10 +13,13 @@ import io.wispforest.owo.braid.framework.widget.StatefulWidget;
 import io.wispforest.owo.braid.framework.widget.Widget;
 import io.wispforest.owo.braid.widgets.basic.*;
 import io.wispforest.owo.braid.widgets.flex.Column;
-import io.wispforest.owo.braid.widgets.flex.Flex;
 import io.wispforest.owo.braid.widgets.flex.Flexible;
 import io.wispforest.owo.braid.widgets.textinput.TextBox;
 import io.wispforest.owo.braid.widgets.textinput.TextEditingController;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+
+import java.util.Map;
 
 public class BraidEditMdWidget extends StatefulWidget {
 
@@ -42,7 +45,7 @@ public class BraidEditMdWidget extends StatefulWidget {
                         new BlockStateFeature(),
                         new ItemStackFeature(client.level.registryAccess()),
                         new EntityFeature(),
-//                        new OwoUITemplateFeature(),
+                        new InlineBraidFeature(Map.of("the_handler", (arg) -> Minecraft.getInstance().gui.getChat().addClientSystemMessage(Component.literal("button: handled with argument " + arg)))),
                         new KeybindFeature(),
                         new TranslationsFeature()
                     );

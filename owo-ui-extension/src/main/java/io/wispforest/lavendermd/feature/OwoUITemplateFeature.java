@@ -18,7 +18,7 @@ import io.wispforest.owo.ui.parsing.UIModelLoader;
 import io.wispforest.owo.ui.parsing.UIModelParsingException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.Containers;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -88,7 +88,7 @@ public class OwoUITemplateFeature implements MarkdownFeature {
 
     @Override
     public void registerNodes(NodeRegistrar registrar) {
-        registrar.registerNode(
+        registrar.<@NotNull TemplateToken>registerNode(
                 (parser, templateToken, tokens) -> new TemplateNode(templateToken.modelId, templateToken.templateName, templateToken.params),
                 (token, tokens) -> token instanceof TemplateToken template ? template : null
         );
